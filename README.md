@@ -25,27 +25,27 @@ pyctemp [-h] [--source-dirpath SOURCE_DIRPATH]
                [--target-dirpath TARGET_DIRPATH]
                [--include-dirpath INCLUDE_DIRPATHS] [-q]
 
-    -h, --help
+ -h, --help
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Show this help message and exit
 
-    --source-dirpath SOURCE_DIRPATH
+--source-dirpath SOURCE_DIRPATH
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Dirpath containing source files to be scanned
 
-    --template-dirpath TEMPLATE_DIRPATHS
+--template-dirpath TEMPLATE_DIRPATHS
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Dirpath containing templates
 
-    --target-dirpath TARGET_DIRPATH
+--target-dirpath TARGET_DIRPATH
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Dirpath in which targets are placed. If the directory does not exist, it will be created.
 
-    --include-dirpath INCLUDE_DIRPATHS
+--include-dirpath INCLUDE_DIRPATHS
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Dirpath in which targets are placed
 
-    -q, --quiet
+-q, --quiet
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Suppress output
 
@@ -93,7 +93,6 @@ For example, the following define would allow IDE linting, but would be stripped
 
 #define T int
 
-will allow
 ### Function Forwarding
 
 In some cases it is desirable to have the option of generating a template which passes function arguments by reference rather than by value. pyctemp accomplishes this by generating two versions of properly annotated functions, one which takes it's arguments by value and another which takes it's arguments by reference.
