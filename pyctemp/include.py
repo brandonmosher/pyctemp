@@ -12,6 +12,7 @@ def get_include_filenames_from_filetext(filetext: str) -> Set[str]:
 
 def get_include_filenames_from_filepath(filepath: Path) -> Set[str]:
     return get_include_filenames_from_filetext(filepath.read_text())
+
 import glob as gglob
 def get_include_filenames_from_glob(
     globs: Set[str],

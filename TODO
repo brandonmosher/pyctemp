@@ -1,0 +1,1 @@
+typedef struct {...} typename_t; works but typedef struct typename {...} typename_t; does not work

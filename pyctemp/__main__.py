@@ -5,21 +5,28 @@
 import sys
 import pprint
 
-from .target import generate_targets_from_dirpath
-from .template import Template
-from .cmd_args import get_cmd_args
+from .template import TemplateFinder, TemplateResolver
+from .__argparse__ import get_cmd_args
 
 def main():
     args = get_cmd_args(sys.argv[1:])
     
     pp = pprint.PrettyPrinter(indent=4)
+    template_finder = TemplateFinder(args.template_dirpaths)
 
-    templates = Template.get_templates(args.template_dirpaths)
+    if not args.no_template_dirpaths_default:
+        template_finder.add_template_dirpaths_default()
+    
+    templates = template_finder.find()
 
-    include_filenames, target_filepaths = generate_targets_from_dirpath(
-        args.source_dirpath,
-        args.target_dirpath,
-        templates, args.include_dirpaths
+    template_resolver = TemplateResolver(
+        templates=templates,
+        include_dirpaths=args.include_dirpaths,
+        typedef_include_filepaths=args.typedef_include_filepaths)
+    
+    include_filenames, target_filepaths = template_resolver.resolve_path(
+        source_dirpath=args.source_dirpath,
+        target_dirpath=args.target_dirpath
     )
           
     if not args.quiet:

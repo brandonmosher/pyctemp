@@ -2,12 +2,11 @@
 
 from typing import Tuple, List, Union
 import re
-from .strip import strip_comments, strip_extra_newlines, strip_macros
+from .strip import strip_comments, strip_macros
 
 def get_unscoped_blobs(filetext: str):
     filetext = strip_comments(filetext)
     filetext = strip_macros(filetext)
-    filetext = strip_extra_newlines(filetext, 1)
 
     blobs: List[str] = []
     bracket_count: int = 0
