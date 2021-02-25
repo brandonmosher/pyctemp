@@ -1,11 +1,11 @@
 # pyctemp
 
-## What it does
-pyctemp is essentialy a powerful find-and-replace tool to instantiate C template code using c++-like syntax. It scans c-files for includes matching specified templates, infers template
+## What
+pyctemp is essentially a powerful find-and-replace tool to instantiate C template code using c++-like syntax. It scans c-files for includes matching specified templates, infers template
 parameter names and values, and generates template targets with those parameter substitutions applied.
 
 ## Why
-While templating is possible in C using only preprocessor macros, it requires ugly and unnatural code. pyctemp is designed to mimic a subset of the C++ template sytax allowing for cleaner source files while still supporting ide linting. Care has been taken to avoid replicating the functionality of a C preprocessor or parser. pyctemps distinguishing feature, therefore, is it's ability to perform text substitutions not possible with the C preprocessor while avoiding the complexity of the C parser. This simplicity makes pyctemp easily adaptable to different needs. Included as examples are templates for dynamic array, linked list, and map (hash table) containers.
+While templating is possible in C using only preprocessor macros, it requires ugly and unnatural code. pyctemp is designed to mimic a subset of the C++ template syntax allowing for cleaner source files while still supporting ide linting. Care has been taken to avoid replicating the functionality of a C preprocessor or parser. pyctemp's distinguishing feature, therefore, is it's ability to perform text substitutions not possible with the C preprocessor while avoiding the complexity of the C parser. This simplicity makes pyctemp easily adaptable to different needs. Included as examples are templates for dynamic array, linked list, and map (hash table) containers.
 
 ## Features
 - Recursively generate targets that include nested templates
@@ -15,7 +15,7 @@ While templating is possible in C using only preprocessor macros, it requires ug
 - No third party libraries required
 - Can be run via the command line or imported as a module
 
-## installation
+## Installation
     git clone https://github.com/mosherbd/pyctemp
 
 ### Run from the command line
@@ -35,6 +35,7 @@ While templating is possible in C using only preprocessor macros, it requires ug
 See the tests folder for basic examples.
 
 To run all .c tests run the following from the top-level pyctemp directory
+
     make
 
 To run a specific .c tests run the following from the top-level pyctemp directory:
@@ -43,9 +44,9 @@ To run a specific .c tests run the following from the top-level pyctemp director
 
 To run .py tests:
 
-    python3 test/[test filename].py
+    python test/[test filename].py
 
-### Quickstart
+### Quick Start
 
 #### Project Structure
 
@@ -76,10 +77,9 @@ struct typedef {
     T data;
 } example_t;
 
-// Using reserved _R and P paramter names to generate by-value and by-reference versions of this function.
+// Using reserved _R and P parameter names to generate by-value and by-reference versions of this function.
 
 void example_init_R(example_t* example, T P data);
-
 ...
 ```
 
@@ -103,7 +103,6 @@ int main() {
     example_t example;
     example_init(&example, 42);
 }
-
 ...
 ```
 
@@ -157,7 +156,7 @@ Any immediate subdirectory of a template dirpath with the ".t" suffix is conside
 
 ### Default Template Directories
 
-When run from the command line, pyctemp searchs it's built-in templates and, if it exists, the "template" directory in the current working directory. This behavior can be disabled using the --no-template-dirpaths-default command line option. When using pyctemp as a module, this behavior can be replicated by instantiating the TemplateResolver class without providing the "templates" argument or by using the TemplateFinder.add_template_dirpaths_default method.
+When run from the command line, pyctemp searches it's built-in templates and, if it exists, the "template" directory in the current working directory. This behavior can be disabled using the --no-template-dirpaths-default command line option. When using pyctemp as a module, this behavior can be replicated by instantiating the TemplateResolver class without providing the "templates" argument or by using the TemplateFinder.add_template_dirpaths_default method.
 
 ### Template Name and Parameter Names
 
@@ -165,7 +164,7 @@ The template name and parameter names are specified in the template directory na
 
     [name]["." delimited parameter names].[file extension]
 
-For example, the template directory name "map.K.V.t" yields map as the template name, K and V as the template paramter names and .t as the file extension.  
+For example, the template directory name "map.K.V.t" yields map as the template name, K and V as the template parameter names and .t as the file extension.  
 
 ### Template Matching and Parameter Values
 
@@ -177,7 +176,7 @@ For example:
     
 matches the map.K.V.t template. The parameter values are inferred as K="int", V="int". All targets in the map.K.V.t directory are generated with those substitutions and placed in the specified target directory.
 
-Warning: This is prone to aliasing. e.g. map.int.int.h would match both a map.K.V.t templates, and a map.A.B.t template. In this case, it would be neccessary to differentiate these templates changing the template name.
+Warning: This is prone to aliasing. e.g. map.int.int.h would match both a map.K.V.t templates, and a map.A.B.t template. In this case, it would be necessary to differentiate these templates changing the template name.
 
 ### Template aliases
 
@@ -199,13 +198,13 @@ to be replaced with:
     line_init(line);
     ...
 
-### Template Substituions
+### Template Substitutions
 
-All instances of parameter names occuring at word, whitespace, or punctuation boundaries are substituted with the corresponding parameter value.
+All instances of parameter names occurring at word, whitespace, or punctuation boundaries are substituted with the corresponding parameter value.
 
 Parameter names that occur in variable names or macros are modified before substitution.
 
-For example, if the paramter name "T" corresponds to the parameter value "const int *" then:
+For example, if the parameter name "T" corresponds to the parameter value "const int *" then:
 
     int func(T arg); -> int func(const int * arg)
 
@@ -213,9 +212,9 @@ whereas:
 
     int func_T(T arg); -> int func_c_int_p(const int * arg)
 
-### Preprocess Directive Stripping
+### Preprocessor Directive Stripping
 
-You may wish to include preprocessor define directives in your templates to provide placeholder parameter values. This prevents linting from flagging these tokens as undefined. These directives are autoatically removed from generated targets.
+You may wish to include preprocessor define directives in your templates to provide placeholder parameter values. This prevents linting from flagging these tokens as undefined. These directives are automatically removed from generated targets.
 
 For example, the following define is stripped from targets generated for the array.T.t template.
 
@@ -261,7 +260,7 @@ pyctemp generates templates recursively making it possible to nest templates. Fo
 
 A typedef is considered missing if a target contains a type declaration, but neither it nor its immediate includes contain a the type definition. This issue typically arises when providing a system or user-defined type as a parameter value.
 
-pyctemp attempts to resolve this issue automtically by:
+pyctemp attempts to resolve this issue automatically by:
 1. Searching for type definitions in the specified include dirpaths and target dirpath
 2. Inserting include directives for any type definitions it finds into the targets that require them.
 
@@ -288,11 +287,8 @@ For example:
 will match the array.T.t template and generate the corresponding targets. pyctemp will detect the missing type definition via:
 
     //array.uint8_t.h
-
     ...
-
     typedef uint8_t _uint8_t
-
     ...
 
 specifying "--typedef-include-filenames uint8_t:inttypes.h" tells pyctemp to resolve this by adding an include directory for inttypes.h.
