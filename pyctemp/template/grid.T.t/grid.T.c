@@ -82,12 +82,7 @@ size_t grid_T_find_index_R(
 	int(*comp)(const T P, const T P))
 {
 	for(size_t i = start; i < grid_T->num_cells; ++i) {
-		if(comp) {
-			if(comp(A(grid_T->values[i]), value)) {
-				return i;
-			}
-		}
-		else if(grid_T->values[i] == P(value)) {
+		if(comp(A(grid_T->values[i]), value)) {
 			return i;
 		}
 	}
