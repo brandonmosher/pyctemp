@@ -42,7 +42,8 @@ T * list_T_push_front_R(list_T_t * list_T, const T P value);
 
 void list_T_swap(list_T_t * list_T, size_t index_a, size_t index_b);
 
-void list_T_for_each_R(list_T_t * list_T, void(*func)(const T P));
+void list_T_for_each_R(list_T_t * list_T,
+	void(*func)(list_T_t * list_T, size_t index, const T P));
 
 void list_T_pop_back(list_T_t * list_T);
 
@@ -50,6 +51,7 @@ void list_T_pop_front(list_T_t * list_T);
 
 void list_T_remove(list_T_t * list_T, size_t index);
 
-void list_T_bubble_sort_R(list_T_t * list_T, int(*comp)(const T P, const T P));
+void list_T_bubble_sort_R(list_T_t * list_T,
+	int(*comp)(const T P, const T P));
 
 #endif

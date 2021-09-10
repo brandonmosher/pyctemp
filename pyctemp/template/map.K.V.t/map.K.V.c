@@ -2,8 +2,8 @@
 
 void map_K_V_init(map_K_V_t* map_K_V, 
                 size_t num_pairs,
-                size_t(*hash)(K),
-                int(*match)(K, K))
+                size_t(*hash)(const K P),
+                int(*match)(const K P, const K P))
 {
     map_K_V->hash = hash;
     map_K_V->match = match;
@@ -23,28 +23,28 @@ static size_t map_K_V_capacity(const map_K_V_t* map_K_V) {
     return array_pair_K_V_size(&(map_K_V->pairs));
 }
 
-static size_t map_K_V_hash(const map_K_V_t* map_K_V, K key) {
-    return (map_K_V->hash(key) % map_K_V_capacity(map_K_V));
+static size_t map_K_V_hash_R(const map_K_V_t* map_K_V, K P key) {
+    return (map_K_V->hash_R(key) % map_K_V_capacity(map_K_V));
 }
 
-static int map_K_V_match(const map_K_V_t* map_K_V, K a, K b) {
-    return map_K_V->match(a, b);
+static int map_K_V_match_R(const map_K_V_t* map_K_V, K P a, K P b) {
+    return map_K_V->match_R(a, b);
 }
 
-static pair_K_V_t* map_K_V_find_pair(const map_K_V_t* map_K_V, K key) {
+static pair_K_V_t* map_K_V_find_pair_R(const map_K_V_t* map_K_V, K P key) {
     const array_pair_K_V_t* pairs = &(map_K_V->pairs);
-    pair_K_V_t* pair = array_pair_K_V_begin(pairs) + map_K_V_hash(map_K_V, key);
+    pair_K_V_t* pair = array_pair_K_V_begin(pairs) + map_K_V_hash_R(map_K_V, key);
     pair_K_V_t* end = array_pair_K_V_end(pairs);
     for(; pair < end; ++pair) {
-        if(pair->valid && map_K_V_match(map_K_V, pair->key, key)) {
+        if(pair->valid && map_K_V_match_R(map_K_V, A(pair->key), key)) {
             return pair;
         }
     }
     return NULL;
 }
 
-V * map_K_V_find(const map_K_V_t* map_K_V, K key) {
-    pair_K_V_t* pair = map_K_V_find_pair(map_K_V, key);
+V * map_K_V_find_R(const map_K_V_t* map_K_V, K P key) {
+    pair_K_V_t* pair = map_K_V_find_pair_R(map_K_V, key);
     if(pair) {
         return &(pair->value);
     }
@@ -69,9 +69,9 @@ static void map_K_V_grow(map_K_V_t* map_K_V) {
     *map_K_V = new_map;
 }
 
-static V * map_K_V_insert_pair(map_K_V_t* map_K_V, pair_K_V_t* new_pair) {
+static V * map_K_V_insert_pair_R(map_K_V_t* map_K_V, pair_K_V_t* new_pair) {
     array_pair_K_V_t* pairs = &(map_K_V->pairs);
-    pair_K_V_t* pair = array_pair_K_V_begin(pairs) + map_K_V_hash(map_K_V, new_pair->key);
+    pair_K_V_t* pair = array_pair_K_V_begin(pairs) + map_K_V_hash_R(map_K_V, new_pair->key);
     pair_K_V_t* end = array_pair_K_V_end(pairs);
     for(; pair < end; ++pair) {
         if(!pair->valid) {
@@ -80,18 +80,19 @@ static V * map_K_V_insert_pair(map_K_V_t* map_K_V, pair_K_V_t* new_pair) {
         }
     }
     map_K_V_grow(map_K_V);
-    return map_K_V_insert_pair(map_K_V, new_pair);
+    return map_K_V_insert_pair_R(map_K_V, new_pair);
 }
 
-V * map_K_V_insert_R(map_K_V_t* map_K_V, K key, V P value) {
-    pair_K_V_t* pair = map_K_V_find_pair(map_K_V, key);
+//TODO: 
+V * map_K_V_insert_R(map_K_V_t* map_K_V, K P key, V P value) {
+    pair_K_V_t* pair = map_K_V_find_pair_R(map_K_V, key);
     if(pair) {
         pair->value = P(value);
-        return &(pair->value); 
+        return &(pair->value);
     }
 
     array_pair_K_V_t* pairs = &(map_K_V->pairs);
-    pair = array_pair_K_V_begin(pairs) + map_K_V_hash(map_K_V, key);
+    pair = array_pair_K_V_begin(pairs) + map_K_V_hash_R(map_K_V, key);
     pair_K_V_t* end = array_pair_K_V_end(pairs);
     for(; pair < end; ++pair) {
         if(!pair->valid) {
@@ -105,15 +106,15 @@ V * map_K_V_insert_R(map_K_V_t* map_K_V, K key, V P value) {
     return map_K_V_insert_R(map_K_V, key, value);
 }
 
-V * map_K_V_find_insert_R(map_K_V_t* map_K_V, K key, V P value) {
-    V * ptr = map_K_V_find(map_K_V, key);
+V * map_K_V_find_insert_R(map_K_V_t* map_K_V, K P key, V P value) {
+    V * ptr = map_K_V_find_R(map_K_V, key);
     if(ptr) {
         return ptr;
     }
     return map_K_V_insert_R(map_K_V, key, value);
 }
 
-void map_K_V_erase(map_K_V_t* map_K_V, K key) {
+void map_K_V_erase_R(map_K_V_t* map_K_V, K P key) {
     pair_K_V_t* pair = map_K_V_find_pair(map_K_V, key);
     if(pair) {
         pair->valid = 0;

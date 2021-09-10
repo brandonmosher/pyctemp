@@ -22,8 +22,8 @@ static inline int coordinate_equal(const coordinate_t a, const coordinate_t b) {
     return (a.row == b.row) && (a.col == b.col);
 }
 
-static inline size_t coordinate_hash(coordinate_t cell) {
-    return (cell.col*cell.col + cell.row*cell.row);
+static inline size_t coordinate_hash(const coordinate_t* coordinate) {
+    return (coordinate->col*coordinate->col + coordinate->row*coordinate->row);
 }
 
 static inline void coordinate_print(const coordinate_t* coordinate) {
