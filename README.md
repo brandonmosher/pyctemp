@@ -16,7 +16,7 @@ While templating is possible in C using only preprocessor macros, it requires ug
 - Can be run via the command line or imported as a module
 
 ## Installation
-    git clone https://github.com/mosherbd/pyctemp
+    git clone https://github.com/brandonmosher/pyctemp
 
 ### Run from the command line
     cd pyctemp
